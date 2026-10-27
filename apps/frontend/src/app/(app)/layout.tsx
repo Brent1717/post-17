@@ -10,6 +10,8 @@ import { jakartaSans } from '@gitroom/frontend/fonts/plus-jakarta-sans/plus.jaka
 import PlausibleProvider from 'next-plausible';
 import clsx from 'clsx';
 import { VariableContextComponent } from '@gitroom/react/helpers/variable.context';
+import { isBillingEnabled } from '@gitroom/helpers/utils/is.billing.enabled';
+import { STRIPE_PROVIDER } from '@gitroom/nestjs-libraries/services/payment/payment.providers';
 import { Fragment } from 'react';
 import UtmSaver from '@gitroom/helpers/utils/utm.saver';
 import { DubAnalytics } from '@gitroom/frontend/components/layout/dubAnalytics';
@@ -56,7 +58,8 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           plontoKey={process.env.NEXT_PUBLIC_POLOTNO!}
           stripeClient={process.env.STRIPE_PUBLISHABLE_KEY!}
           isChatBase={!!process.env.CHATBASE_TOKEN}
-          billingEnabled={!!process.env.STRIPE_PUBLISHABLE_KEY}
+          billingEnabled={isBillingEnabled()}
+          paymentProvider={process.env.PAYMENT_PROVIDER || STRIPE_PROVIDER}
           discordUrl={process.env.NEXT_PUBLIC_DISCORD_SUPPORT!}
           frontEndUrl={process.env.FRONTEND_URL!}
           isGeneral={!!process.env.IS_GENERAL}

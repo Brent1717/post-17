@@ -32,11 +32,15 @@ export class PaymentProviderManager {
     }));
   }
 
-  // First registered provider of a platform is the one new subscriptions use
+  // The provider new subscriptions use: PAYMENT_PROVIDER when it is one of the
+  // platform's providers, otherwise the first registered one
   getDefaultProvider(platform: PaymentPlatform) {
-    const found = this.getProviders().find(
+    const providers = this.getProviders().filter(
       (p) => p.provider.platform === platform
     );
+    const found =
+      providers.find((p) => p.name === process.env.PAYMENT_PROVIDER) ||
+      providers[0];
 
     if (!found) {
       throw new Error(`No payment provider registered for ${platform}`);

@@ -33,6 +33,7 @@ import {
   Disconnect,
   PublishedWithError,
 } from '@gitroom/nestjs-libraries/integrations/social.abstract';
+import { isBillingEnabled } from '@gitroom/helpers/utils/is.billing.enabled';
 
 // Drops fields the workflow and downstream activities never read — biggest wins are `error` (grows per retry) and `childrenPost` (Prisma side-loads it on every recursive row).
 function slimPost(post: any) {
@@ -154,7 +155,7 @@ export class PostActivity {
 
   @ActivityMethod()
   async getPost(orgId: string, postId: string) {
-    if (process.env.STRIPE_SECRET_KEY) {
+    if (isBillingEnabled()) {
       const subscription = await this._subscriptionService.getSubscription(
         orgId
       );
@@ -172,7 +173,7 @@ export class PostActivity {
 
   @ActivityMethod()
   async getPostsList(orgId: string, postId: string) {
-    if (process.env.STRIPE_SECRET_KEY) {
+    if (isBillingEnabled()) {
       const subscription = await this._subscriptionService.getSubscription(
         orgId
       );
@@ -354,7 +355,7 @@ export class PostActivity {
     // the ones on their own HTTP client (x, youtube, bluesky) are still
     // narrowed down to the step they hung on.
     setHeartbeatDetails('subscription lookup');
-    if (process.env.STRIPE_SECRET_KEY) {
+    if (isBillingEnabled()) {
       const subscription = await this._subscriptionService.getSubscription(
         integration.organizationId
       );

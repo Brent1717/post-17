@@ -5,6 +5,7 @@ import { OrganizationService } from '@gitroom/nestjs-libraries/database/prisma/o
 import { OAuthService } from '@gitroom/nestjs-libraries/database/prisma/oauth/oauth.service';
 import { HttpForbiddenException } from '@gitroom/nestjs-libraries/services/exception.filter';
 import { setSentryUserContext } from '@gitroom/nestjs-libraries/sentry/initialize.sentry';
+import { isBillingEnabled } from '@gitroom/helpers/utils/is.billing.enabled';
 
 @Injectable()
 export class PublicAuthMiddleware implements NestMiddleware {
@@ -57,7 +58,7 @@ export class PublicAuthMiddleware implements NestMiddleware {
         }
       }
 
-      if (!!process.env.STRIPE_SECRET_KEY && !org.subscription) {
+      if (isBillingEnabled() && !org.subscription) {
         res
           .status(HttpStatus.UNAUTHORIZED)
           .json({ msg: 'No subscription found' });

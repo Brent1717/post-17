@@ -29,6 +29,11 @@ import useCookie from 'react-use-cookie';
 import { LogoutComponent } from '@gitroom/frontend/components/layout/logout.component';
 import { DeveloperIconComponent } from '@gitroom/frontend/components/developer/developer.icon.component';
 import { InvoicesComponent } from '@gitroom/frontend/components/layout/invoices.component';
+import { STRIPE_PROVIDER } from '@gitroom/nestjs-libraries/services/payment/payment.providers';
+import { Button } from '@gitroom/react/form/button';
+import { useToaster } from '@gitroom/react/toaster/toaster';
+import { useTrack } from '@gitroom/react/helpers/use.track';
+import { TrackEnum } from '@gitroom/nestjs-libraries/user/track.enum';
 
 const ModeComponent = dynamic(
   () => import('@gitroom/frontend/components/layout/mode.component'),
@@ -48,11 +53,14 @@ const EmbeddedBilling = dynamic(
 );
 
 export const FirstBillingComponent = () => {
-  const { stripeClient } = useVariables();
+  const { stripeClient, paymentProvider } = useVariables();
+  // Stripe renders its checkout inside the page, other providers host it
+  const embedded = paymentProvider === STRIPE_PROVIDER;
   const user = useUser();
   const dub = useDubClickId();
   const [stripe, setStripe] = useState<null | Promise<Stripe>>(null);
   const [stripeFailed, setStripeFailed] = useState(false);
+  const [blocked, setBlocked] = useState(false);
   const [tier, setTier] = useState('STANDARD');
   const [period, setPeriod] = useState('MONTHLY');
   const fetch = useFetch();
@@ -65,6 +73,9 @@ export const FirstBillingComponent = () => {
   const [fbp] = useCookie('_fbp', '');
 
   useEffect(() => {
+    if (!embedded) {
+      return;
+    }
     const stripePromise = loadStripe(stripeClient);
     stripePromise.catch(() => setStripeFailed(true));
     setStripe(stripePromise);
@@ -104,7 +115,7 @@ export const FirstBillingComponent = () => {
   };
 
   const { data, isLoading } = useSWR(
-    `/billing-${tier}-${period}`,
+    embedded ? `/billing-${tier}-${period}` : null,
     loadCheckout,
     {
       revalidateOnFocus: false,
@@ -116,10 +127,10 @@ export const FirstBillingComponent = () => {
   );
 
   useEffect(() => {
-    if (data?.blocked) {
+    if (data?.blocked || blocked) {
       mutate('/user/self');
     }
-  }, [data?.blocked, mutate]);
+  }, [data?.blocked, blocked, mutate]);
 
   const price = useMemo(
     () => Object.entries(pricing).filter(([key, value]) => key !== 'FREE'),
@@ -221,13 +232,19 @@ export const FirstBillingComponent = () => {
           <div className="block tablet:hidden">
             <JoinOver />
           </div>
-          {data?.blocked ? (
+          {data?.blocked || blocked ? (
             <div className="mt-[24px] p-[24px] rounded-[20px] border-[1.5px] border-newColColor text-[16px] font-[500]">
               {t(
                 'billing_other_account_subscribed',
                 'Another account with this email already has an active subscription. Please log off and sign in to that account to manage your subscription.'
               )}
             </div>
+          ) : !embedded ? (
+            <HostedCheckout
+              tier={tier}
+              period={period}
+              onBlocked={() => setBlocked(true)}
+            />
           ) : stripeFailed ? (
             <div className="mt-[24px] p-[24px] rounded-[20px] border-[1.5px] border-newColColor text-[16px] font-[500]">
               {t(
@@ -329,6 +346,114 @@ export const FirstBillingComponent = () => {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+// Providers that host the payment page: the plan is confirmed here and the
+// user is redirected to the provider's checkout to pay
+const HostedCheckout: FC<{
+  tier: string;
+  period: string;
+  onBlocked: () => void;
+}> = ({ tier, period, onBlocked }) => {
+  const fetch = useFetch();
+  const user = useUser();
+  const dub = useDubClickId();
+  const toaster = useToaster();
+  const track = useTrack();
+  const t = useT();
+  const [fbc] = useCookie('_fbc', '');
+  const [fbp] = useCookie('_fbp', '');
+  const [loading, setLoading] = useState(false);
+
+  const checkout = useCallback(async () => {
+    setLoading(true);
+    try {
+      const { url, blocked } = await (
+        await fetch('/billing/subscribe', {
+          method: 'POST',
+          body: JSON.stringify({
+            billing: tier,
+            period,
+            ...(dub ? { dub } : {}),
+            ...(fbc ? { fbc } : {}),
+            ...(fbp ? { fbp } : {}),
+          }),
+        })
+      ).json();
+
+      if (url) {
+        await track(TrackEnum.InitiateCheckout, {
+          value:
+            pricing[tier][period === 'YEARLY' ? 'year_price' : 'month_price'],
+          currency: 'USD',
+        });
+        window.location.href = url;
+        return;
+      }
+
+      if (blocked) {
+        onBlocked();
+        return;
+      }
+    } catch (err) {}
+
+    toaster.show(
+      t(
+        'billing_checkout_failed',
+        'We could not open the checkout, please try again'
+      ),
+      'warning'
+    );
+    setLoading(false);
+  }, [tier, period, dub, fbc, fbp]);
+
+  return (
+    <div className="flex flex-col w-full pt-[48px] flex-1 tablet:pt-0">
+      <h4 className="mb-[16px] text-[24px] font-[700]">
+        {t('billing_order_summary', 'Order Summary')}
+      </h4>
+      <div className="rounded-[12px] border border-newColColor p-[20px] flex flex-col gap-[12px]">
+        <div className="flex justify-between items-center">
+          <div className="flex flex-col">
+            <span className="font-[600] text-textColor">
+              {capitalize(tier)}
+            </span>
+            <span className="text-[13px] text-textColor/60">
+              {period === 'MONTHLY'
+                ? t('billing_monthly', 'Monthly')
+                : t('billing_yearly', 'Yearly')}
+            </span>
+          </div>
+          <span className="font-[500] text-textColor">
+            ${pricing[tier][period === 'MONTHLY' ? 'month_price' : 'year_price']}
+          </span>
+        </div>
+        <div className="text-[12px]">
+          <strong>
+            {t(
+              'billing_cancel_notice',
+              'Cancel anytime from settings without talking to a person and never be charged.'
+            )}
+          </strong>
+        </div>
+      </div>
+      <Button
+        className="mt-[24px] h-[42px] rounded-[10px] self-start mobile:w-full"
+        loading={loading}
+        onClick={checkout}
+      >
+        {user?.allowTrial
+          ? t('billing_pay_0_start_trial', 'Pay $0 Today - Start your free trial!')
+          : t('billing_continue_to_checkout', 'Continue to checkout')}
+      </Button>
+      <div className="mt-[16px] text-[14px] text-textItemBlur">
+        {t(
+          'billing_hosted_checkout_notice',
+          "You'll complete your payment on our payment partner's secure checkout page."
+        )}
       </div>
     </div>
   );
