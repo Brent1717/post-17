@@ -24,3 +24,7 @@ Necessary upstream edits and merge handling:
 These edits increase merge overlap in UI copy, translations and layouts. There is no upstream white-label configuration for all these strings or inline logos; shared tokens, assets and the PostVoice wrapper isolate the reusable portions. Review these areas during each upstream merge rather than globally renaming identifiers.
 
 Manual deployment and verification requirements are documented in docs/POSTVOICE_REBRAND.md. Do not deploy a modified release before its corresponding source is available from the public source link. No database migration, Git remote, payment entitlement scoping, authentication protocol or publishing workflow changes are part of this rebrand.
+
+## Neutral dashboard backgrounds
+
+Dark app and authentication surfaces use PostVoice-owned neutral canvas/surface tokens in apps/frontend/src/app/postvoice/tokens.scss. The upstream colors.scss maps --new-bgColor, --new-bgColorInner and legacy --color-primary to these tokens; preserve those mappings during merges. The admin toolbar in components/layout/impersonate.tsx uses the existing theme surface and text utilities instead of the green action colour. These small presentation edits add limited merge overlap; dashboard components continue using existing semantic utilities. Brand green remains available for actions and identity.

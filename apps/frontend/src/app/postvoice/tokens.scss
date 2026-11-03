@@ -1,7 +1,9 @@
 :root{
   --pv-primary-rgb:22 53 46;
   --pv-field-green:#16352E; /* primary: logo, buttons, icon tiles */
-  --pv-charcoal:#121A17;    /* text, dark surfaces */
+  --pv-charcoal:#121A17;    /* brand text */
+  --pv-dark-background:#141414; /* neutral app/auth canvas */
+  --pv-dark-surface:#1E1E1E;    /* neutral navigation, panels, inputs */
   --pv-coral:#F07A5A;       /* accent, mark on dark, highlights */
   --pv-coral-text:#E0613F;  /* coral used as text on white (headline highlight) */
   --pv-cloud:#F3F5F1;       /* page/section background */

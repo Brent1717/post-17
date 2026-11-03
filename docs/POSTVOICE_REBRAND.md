@@ -8,6 +8,8 @@ Public logo.svg and logo-text.svg are the light variants; postiz.svg and postiz-
 
 Both themes map existing semantic tokens to the new palette. Deprecated custom colour tokens remain as upstream compatibility definitions; purple usages in the product now use semantic brand tokens. Social network branding and Facebook's selectable post backgrounds retain their own colours. Chart.js uses equivalent RGB values because canvas cannot resolve CSS custom properties. The existing local Plus Jakarta Sans font is used at weights 400 through 800.
 
+Dark dashboards and authentication screens use neutral charcoal backgrounds (#141414 canvas, #1E1E1E surfaces), separate from the green brand charcoal token. Navigation, headers, form surfaces and the admin toolbar inherit these semantic backgrounds; green remains an action/brand colour. Light theme surfaces retain their existing palette.
+
 ## Optional services
 
 All these settings belong in deployment configuration. No live .env values were changed. Public NEXT_PUBLIC values require a frontend rebuild.

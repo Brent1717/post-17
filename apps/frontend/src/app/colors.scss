@@ -4,8 +4,8 @@
     --new-back-drop: #000;
     --new-settings: #242323;
     --new-border: #252525;
-    --new-bgColor: var(--pv-charcoal);
-    --new-bgColorInner: #1B2923;
+    --new-bgColor: var(--pv-dark-background);
+    --new-bgColorInner: var(--pv-dark-surface);
     --new-sep: #454444;
     --new-bgLineColor: #212121;
     --new-textItemFocused: #1a1919;
@@ -99,7 +99,7 @@
 
 :root {
   .dark {
-    --color-primary: var(--pv-charcoal);
+    --color-primary: var(--pv-dark-background);
     --color-secondary: #090b13;
     --color-text: #ffffff;
     --color-third: #080b13;
