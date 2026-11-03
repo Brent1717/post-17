@@ -1,10 +1,11 @@
+@use './postvoice/tokens.scss';
 :root {
   .dark {
     --new-back-drop: #000;
     --new-settings: #242323;
     --new-border: #252525;
-    --new-bgColor: #0e0e0e;
-    --new-bgColorInner: #1a1919;
+    --new-bgColor: var(--pv-charcoal);
+    --new-bgColorInner: #1B2923;
     --new-sep: #454444;
     --new-bgLineColor: #212121;
     --new-textItemFocused: #1a1919;
@@ -14,13 +15,13 @@
     --new-blockSeparator: #272626;
     --new-btn-simple: #313030;
     --new-btn-text: #ffffff;
-    --new-btn-primary: #612bd3;
-    --new-ai-btn: #d82d7e;
+    --new-btn-primary: var(--pv-field-green);
+    --new-ai-btn: var(--pv-coral-text);
     --new-box-hover: #201f1f;
     --new-table-border: #2b2b2b;
     --new-table-header: #1e1d1d;
     --new-table-text: #9c9c9c;
-    --new-table-text-focused: #fc69ff;
+    --new-table-text-focused: var(--pv-coral);
     --new-small-strips: #191818;
     --new-big-strips: #161515;
     --new-col-color: #2c2b2b;
@@ -44,27 +45,27 @@
     --youtube-svg-border: #A0A0A0;
   }
   .light {
-    --new-back-drop: #2d1b57;
-    --new-settings: #eceef1;
+    --new-back-drop: var(--pv-charcoal);
+    --new-settings: var(--pv-mist);
     --new-sep: #d5d9dd;
-    --new-border: #eaecee;
-    --new-bgColor: #f0f2f4;
+    --new-border: var(--pv-line);
+    --new-bgColor: var(--pv-cloud);
     --new-bgColorInner: #ffffff;
     --new-bgLineColor: #e7e9eb;
-    --new-textItemFocused: #3900b2;
-    --new-textItemBlur: #777b7f;
-    --new-boxFocused: #ebe8ff;
-    --new-textColor: 14 14 14;
+    --new-textItemFocused: var(--pv-field-green);
+    --new-textItemBlur: var(--pv-moss-grey);
+    --new-boxFocused: var(--pv-mist);
+    --new-textColor: 18 26 23;
     --new-blockSeparator: #f2f2f4;
     --new-btn-simple: #eceef1;
-    --new-btn-text: #0e0e0e;
-    --new-btn-primary: #612bd3;
-    --new-ai-btn: #d82d7e;
+    --new-btn-text: var(--pv-charcoal);
+    --new-btn-primary: var(--pv-field-green);
+    --new-ai-btn: var(--pv-coral-text);
     --new-box-hover: #f4f6f8;
     --new-table-border: #e7e9eb;
     --new-table-header: #f5f7f9;
     --new-table-text: #777b7f;
-    --new-table-text-focused: #fc69ff;
+    --new-table-text-focused: var(--pv-coral-text);
     --new-small-strips: #191818;
     --new-big-strips: #f5f7f9;
     --new-col-color: #eff1f3;
@@ -98,14 +99,14 @@
 
 :root {
   .dark {
-    --color-primary: #0e0e0e;
+    --color-primary: var(--pv-charcoal);
     --color-secondary: #090b13;
     --color-text: #ffffff;
     --color-third: #080b13;
-    --color-forth: #612ad5;
+    --color-forth: var(--pv-field-green);
     --color-fifth: var(--new-bgLineColor);
     --color-sixth: var(--new-table-header);
-    --color-seventh: #7236f1;
+    --color-seventh: var(--pv-coral-text);
     --color-gray: #8c8c8c;
     --color-input: var(--new-table-header);
     --color-input-text: #64748b;
@@ -168,14 +169,14 @@
     --color-modalCustom: #000000;
   }
   .light {
-    --color-primary: #f0f2f4;
+    --color-primary: var(--pv-cloud);
     --color-secondary: #fff;
     --color-text: #000;
     --color-third: white;
-    --color-forth: #612ad5;
+    --color-forth: var(--pv-field-green);
     --color-fifth: var(--new-bgLineColor);
     --color-sixth: var(--new-table-header);
-    --color-seventh: #7236f1;
+    --color-seventh: var(--pv-coral-text);
     --color-gray: #8c8c8c;
     --color-input: var(--new-table-header);
     --color-input-text: #64748b;

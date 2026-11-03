@@ -19,6 +19,7 @@ import { useSWRConfig } from 'swr';
 import clsx from 'clsx';
 import { TeamsComponent } from '@gitroom/frontend/components/settings/teams.component';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
+import { SourceCodeLink } from '@gitroom/frontend/components/postvoice/brand';
 import { LogoutComponent } from '@gitroom/frontend/components/layout/logout.component';
 import { useSearchParams } from 'next/navigation';
 import { useVariables } from '@gitroom/react/helpers/variable.context';
@@ -153,6 +154,7 @@ export const SettingsPopup: FC<{
           {showLogout && (
             <div className="mt-4 mobile:mt-[8px]">
               <LogoutComponent />
+                <SourceCodeLink />
             </div>
           )}
         </div>

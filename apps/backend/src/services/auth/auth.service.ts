@@ -73,7 +73,7 @@ export class AuthService {
         const obj = { addedOrg, jwt: await this.jwt(create.users[0].user) };
         await this._emailService.sendEmailSync(
           body.email,
-          'Activate your account',
+          'Activate your PostVoice account',
           `Click <a href="${process.env.FRONTEND_URL}/auth/activate/${obj.jwt}">here</a> to activate your account`
         );
         return obj;
@@ -230,7 +230,7 @@ export class AuthService {
 
     await this._emailService.sendEmailSync(
       user.email,
-      'Reset your password',
+      'Reset your PostVoice password',
       `You have requested to reset your password. <br />Click <a href="${process.env.FRONTEND_URL}/auth/forgot/${resetValues}">here</a> to reset your password<br />The link will expire in 20 minutes`
     );
   }
@@ -283,7 +283,7 @@ export class AuthService {
 
     await this._emailService.sendEmailSync(
       user.email,
-      'Activate your account',
+      'Activate your PostVoice account',
       `Click <a href="${process.env.FRONTEND_URL}/auth/activate/${jwt}">here</a> to activate your account`
     );
 

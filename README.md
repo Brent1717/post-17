@@ -1,3 +1,11 @@
+# PostVoice
+
+PostVoice is an independently maintained commercial social scheduling product based on [Postiz](https://github.com/gitroomhq/postiz-app). This fork remains licensed under AGPL-3.0; the upstream attribution and licence are preserved below.
+
+The product uses the Signal Field identity: Field Green, Coral, and Plus Jakarta Sans. See [rebrand configuration and release checks](docs/POSTVOICE_REBRAND.md) and [upstream modification notes](UPSTREAM.md). The app's **Source code** link points to [this public fork](https://github.com/Brent1717/post-17). Publish the matching source revision before deploying each release.
+
+---
+
 <p align="center">
   <a href="https://postiz.com/" target="_blank">
   <picture>

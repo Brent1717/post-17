@@ -21,11 +21,11 @@ const enableOidcEmailClaims = () => Boolean(openAiOAuthClientId());
 const hubspotOAuthClientId = () =>
   process.env.HUBSPOT_OAUTH_CLIENT_ID?.trim();
 
-// Postiz access tokens never expire, but HubSpot wants an expires_in: ten
+// PostVoice access tokens never expire, but HubSpot wants an expires_in: ten
 // years (a hundred would not fit in a 32-bit integer)
 const hubspotTokenExpiresIn = 10 * 365 * 24 * 60 * 60;
 
-// The HubSpot app itself (HubSpot project > app > Auth tab), not the Postiz
+// The HubSpot app itself (HubSpot project > app > Auth tab), not the PostVoice
 // app above: its redirect URL finishes the install, see completeHubspotInstall
 const hubspotAppClientId = () => process.env.HUBSPOT_APP_CLIENT_ID?.trim();
 const hubspotAppClientSecret = () =>
@@ -48,7 +48,7 @@ export const hubspotInstallUrl = () => {
   return url.toString();
 };
 
-// Postiz Cloud only, a self-hosted install has nothing to relay to
+// PostVoice Cloud only, a self-hosted install has nothing to relay to
 export const selfHostedRelayEnabled = () =>
   process.env.MCP_SELF_HOSTED_RELAY === 'true';
 
@@ -300,7 +300,7 @@ export class OAuthService {
   // Only MCP connections can be relayed to an instance: dynamically registered
   // clients (registration is only advertised to MCP clients), the ChatGPT app,
   // or a client asking for one of the /mcp-oauth resources (RFC 8707). Apps
-  // that use Postiz OAuth for the public API never get the option, a relayed
+  // that use PostVoice OAuth for the public API never get the option, a relayed
   // token doesn't work there
   allowsSelfHosted(
     app: Pick<OAuthApp, 'clientId' | 'dynamic'>,
@@ -633,7 +633,7 @@ export class OAuthService {
     };
   }
 
-  // HubSpot refuses a token response without a refresh token. Postiz access
+  // HubSpot refuses a token response without a refresh token. PostVoice access
   // tokens never expire, so the refresh token is the access token itself:
   // refreshing hands it back unchanged, and it stops working exactly when the
   // access token does. No other client gets these fields
@@ -696,7 +696,7 @@ export class OAuthService {
   }
 
   // HubSpot only counts an install of the HubSpot app once its code is
-  // exchanged. Postiz makes no HubSpot API calls, so the tokens are not kept
+  // exchanged. PostVoice makes no HubSpot API calls, so the tokens are not kept
   async completeHubspotInstall(code: string) {
     const clientId = hubspotAppClientId();
     const clientSecret = hubspotAppClientSecret();
@@ -721,7 +721,7 @@ export class OAuthService {
     } catch (err) {
       // timeout or network failure, fetch rejects instead of answering
       throw new HttpException(
-        'Could not reach HubSpot to finish installing Postiz, please try again',
+        'Could not reach HubSpot to finish installing PostVoice, please try again',
         HttpStatus.BAD_GATEWAY,
         { cause: err }
       );
@@ -730,7 +730,7 @@ export class OAuthService {
     if (!response.ok) {
       const value = await response.json().catch(() => null);
       throw new HttpException(
-        `Could not finish installing Postiz in HubSpot${
+        `Could not finish installing PostVoice in HubSpot${
           value?.message ? `: ${value.message}` : ''
         }`,
         HttpStatus.BAD_REQUEST

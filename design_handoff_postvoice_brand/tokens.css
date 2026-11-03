@@ -1,0 +1,16 @@
+:root{
+  --pv-field-green:#16352E; /* primary: logo, buttons, icon tiles */
+  --pv-charcoal:#121A17;    /* text, dark surfaces */
+  --pv-coral:#F07A5A;       /* accent, mark on dark, highlights */
+  --pv-coral-text:#E0613F;  /* coral used as text on white (headline highlight) */
+  --pv-cloud:#F3F5F1;       /* page/section background */
+  --pv-mist:#E8ECE6;        /* secondary surface */
+  --pv-line:#DFE4DC;        /* borders, dividers */
+  --pv-moss-grey:#5D6A63;   /* secondary text, labels */
+  --pv-body:#3A4540;        /* body copy on white */
+  --pv-white:#FFFFFF;
+  --pv-badge-bg:#FDE6DE; --pv-badge-fg:#A33D22; /* status pill */
+  --pv-font:'Plus Jakarta Sans',sans-serif;
+  --pv-mono:'JetBrains Mono',monospace;
+  --pv-radius-sm:6px; --pv-radius-btn:8px; --pv-radius-icon-sm:7px; --pv-radius-icon-md:11px; --pv-radius-icon-lg:22px; --pv-radius-pill:999px;
+}

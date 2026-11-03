@@ -24,12 +24,23 @@ import {
 } from '@gitroom/react/translation/i18n.config';
 import { HtmlComponent } from '@gitroom/frontend/components/layout/html.component';
 import Script from 'next/script';
+import { postvoice } from '@gitroom/helpers/postvoice/brand';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  metadataBase: new URL(process.env.FRONTEND_URL || postvoice.website),
+  title: { default: postvoice.name, template: '%s' },
+  description: postvoice.description,
+  openGraph: { siteName: postvoice.name, title: postvoice.name, description: postvoice.description, images: [{ url: '/og-postvoice.png', width: 1200, height: 630, alt: 'PostVoice' }] },
+  twitter: { card: 'summary_large_image', title: postvoice.name, description: postvoice.description, images: ['/og-postvoice.png'] },
+};
+
 import { ChangeDirClient } from '@gitroom/frontend/components/new-layout/change.dir.client';
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const cookieStore = await cookies();
   const language = cookieStore.get(cookieName)?.value || fallbackLng;
-  const Plausible = !!process.env.STRIPE_PUBLISHABLE_KEY
+  const Plausible = process.env.PLAUSIBLE_ENABLED === 'true' && !!process.env.PLAUSIBLE_DOMAIN
     ? PlausibleProvider
     : Fragment;
   return (
@@ -39,7 +50,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         {!!process.env.DATAFAST_WEBSITE_ID && (
           <Script
             data-website-id={process.env.DATAFAST_WEBSITE_ID}
-            data-domain="postiz.com"
+            data-domain={process.env.DATAFAST_DOMAIN || new URL(process.env.FRONTEND_URL || postvoice.website).hostname}
             src="https://datafa.st/js/script.js"
             strategy="afterInteractive"
           />
@@ -55,9 +66,9 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           }
           environment={process.env.NODE_ENV!}
           backendUrl={process.env.NEXT_PUBLIC_BACKEND_URL!}
-          plontoKey={process.env.NEXT_PUBLIC_POLOTNO!}
+          plontoKey={process.env.POLOTNO_COMMERCIAL_LICENSE === 'true' ? process.env.NEXT_PUBLIC_POLOTNO || '' : ''}
           stripeClient={process.env.STRIPE_PUBLISHABLE_KEY!}
-          isChatBase={!!process.env.CHATBASE_TOKEN}
+          isChatBase={process.env.CHATBASE_ENABLED === 'true' && !!process.env.CHATBASE_TOKEN && !!process.env.NEXT_PUBLIC_CHATBASE_BOT_ID}
           billingEnabled={isBillingEnabled()}
           paymentProvider={process.env.PAYMENT_PROVIDER || STRIPE_PROVIDER}
           discordUrl={process.env.NEXT_PUBLIC_DISCORD_SUPPORT!}
@@ -70,7 +81,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           cloudflareUrl={process.env.CLOUDFLARE_BUCKET_URL || ''}
           mainUrl={process.env.MAIN_URL || ''}
           mcpUrl={process.env.MCP_URL}
-          dub={!!process.env.STRIPE_PUBLISHABLE_KEY}
+          dub={process.env.NEXT_PUBLIC_DUB_ENABLED === 'true' && !!process.env.NEXT_PUBLIC_DUB_REFER_DOMAIN}
           facebookPixel={process.env.NEXT_PUBLIC_FACEBOOK_PIXEL!}
           telegramBotName={process.env.TELEGRAM_BOT_NAME!}
           neynarClientId={process.env.NEYNAR_CLIENT_ID!}
@@ -104,7 +115,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
             <FacebookComponent />
             <GoogleTagManagerComponent gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
             <Plausible
-              domain={!!process.env.IS_GENERAL ? 'postiz.com' : 'gitroom.com'}
+              domain={process.env.PLAUSIBLE_DOMAIN || ''}
             >
               <LayoutContext>
                 <UtmSaver />

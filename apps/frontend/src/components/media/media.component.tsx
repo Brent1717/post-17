@@ -11,6 +11,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { useVariables } from '@gitroom/react/helpers/variable.context';
 import { Button } from '@gitroom/react/form/button';
 import useSWR from 'swr';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
@@ -489,7 +490,7 @@ export const MediaBox: FC<{
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={t('search_media_by_name', 'Search by file name')}
-              className="w-full h-[44px] px-[14px] rounded-[8px] bg-newBgColorInner border border-newColColor text-[14px] outline-none focus:border-[#612BD3]"
+              className="w-full h-[44px] px-[14px] rounded-[8px] bg-newBgColorInner border border-newColColor text-[14px] outline-none focus:border-btnPrimary"
             />
           </div>
           <input
@@ -629,13 +630,13 @@ export const MediaBox: FC<{
                     className={clsx(
                       'w-full h-full rounded-[6px] border-[4px] relative',
                       !!selected.find((p) => p.id === media.id)
-                        ? 'border-[#612BD3]'
+                        ? 'border-btnPrimary'
                         : 'border-transparent'
                     )}
                     onClick={addRemoveSelected(media)}
                   >
                     {!!selected.find((p: any) => p.id === media.id) ? (
-                      <div className="text-white flex z-[101] justify-center items-center text-[14px] font-[500] w-[24px] h-[24px] rounded-full bg-[#612BD3] absolute -bottom-[10px] -end-[10px]">
+                      <div className="text-white flex z-[101] justify-center items-center text-[14px] font-[500] w-[24px] h-[24px] rounded-full bg-btnPrimary absolute -bottom-[10px] -end-[10px]">
                         {selected.findIndex((z: any) => z.id === media.id) + 1}
                       </div>
                     ) : (
@@ -721,7 +722,7 @@ export const MediaBox: FC<{
               <button
                 onClick={standalone ? () => {} : addMedia}
                 disabled={selected.length === 0}
-                className="cursor-pointer text-white disabled:opacity-80 disabled:cursor-not-allowed h-[52px] px-[20px] items-center justify-center bg-[#612BD3] flex rounded-[10px] mobile:h-[44px] mobile:rounded-[8px] mobile:font-[600] mobile:disabled:opacity-100 mobile:disabled:bg-btnSimple mobile:disabled:text-textItemBlur"
+                className="cursor-pointer text-white disabled:opacity-80 disabled:cursor-not-allowed h-[52px] px-[20px] items-center justify-center bg-btnPrimary flex rounded-[10px] mobile:h-[44px] mobile:rounded-[8px] mobile:font-[600] mobile:disabled:opacity-100 mobile:disabled:bg-btnSimple mobile:disabled:text-textItemBlur"
               >
                 {t('add_selected_media', 'Add selected media')}
               </button>
@@ -862,7 +863,9 @@ export const MultiMediaComponent: FC<{
     [currentMedia]
   );
 
+  const { plontoKey } = useVariables();
   const designMedia = useCallback(() => {
+    if (!plontoKey) return;
     if (!!user?.tier?.ai && !dummy) {
       modals.openModal({
         askClose: false,
@@ -873,7 +876,7 @@ export const MultiMediaComponent: FC<{
         ),
       });
     }
-  }, [changeMedia, t]);
+  }, [changeMedia, t, plontoKey]);
 
   return (
     <>
@@ -976,6 +979,7 @@ export const MultiMediaComponent: FC<{
                 </div>
                 <div
                   onClick={designMedia}
+                  style={{ display: plontoKey ? undefined : 'none' }}
                   className="cursor-pointer h-[30px] rounded-[6px] justify-center items-center flex bg-newColColor px-[8px] mobile:hidden"
                 >
                   <div className="flex gap-[5px] items-center">
@@ -1070,7 +1074,9 @@ export const MediaComponent: FC<{
   const modals = useModals();
   const mediaDirectory = useMediaDirectory();
 
+  const { plontoKey } = useVariables();
   const showDesignModal = useCallback(() => {
+    if (!plontoKey) return;
     modals.openModal({
       title: t('media_editor', 'Media Editor'),
       askClose: false,
@@ -1087,7 +1093,7 @@ export const MediaComponent: FC<{
         />
       ),
     });
-  }, [t]);
+  }, [t, plontoKey]);
   const changeMedia = useCallback((m: { path: string; id: string }[]) => {
     setCurrentMedia(m[0]);
     onChange({
@@ -1136,7 +1142,8 @@ export const MediaComponent: FC<{
         <Button onClick={showModal}>{t('select', 'Select')}</Button>
         <Button
           onClick={showDesignModal}
-          className="!bg-customColor45 mobile:hidden"
+          style={{ display: plontoKey ? undefined : 'none' }}
+          className="!bg-btnPrimary mobile:hidden"
         >
           {t('editor', 'Editor')}
         </Button>

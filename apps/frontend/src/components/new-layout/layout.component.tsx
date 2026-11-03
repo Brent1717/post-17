@@ -1,6 +1,7 @@
 'use client';
 
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import { SourceCodeLink } from '@gitroom/frontend/components/postvoice/brand';
 import { Logo } from '@gitroom/frontend/components/new-layout/logo';
 import { jakartaSans } from '@gitroom/frontend/fonts/plus-jakarta-sans/plus.jakarta.sans.font';
 const ModeComponent = dynamic(
@@ -138,6 +139,7 @@ export const LayoutComponent = ({ children }: { children: ReactNode }) => {
                             <Logo />
                           </div>
                           <TopMenu />
+                          <SourceCodeLink />
                         </div>
                       </div>
                     </div>

@@ -10,7 +10,7 @@ export const DubAnalytics = () => {
   return (
     <DubAnalyticsIn
       domainsConfig={{
-        refer: 'postiz.pro',
+        refer: process.env.NEXT_PUBLIC_DUB_REFER_DOMAIN!,
       }}
     />
   );

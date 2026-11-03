@@ -1,3 +1,4 @@
+import { postvoice } from '@gitroom/helpers/postvoice/brand';
 import { Injectable } from '@nestjs/common';
 import { EmailInterface } from '@gitroom/nestjs-libraries/emails/email.interface';
 import { ResendProvider } from '@gitroom/nestjs-libraries/emails/resend.provider';
@@ -65,16 +66,22 @@ export class EmailService {
       return;
     }
 
-    if (!process.env.EMAIL_FROM_ADDRESS || !process.env.EMAIL_FROM_NAME) {
+    if (!process.env.EMAIL_FROM_ADDRESS) {
       console.log(
         'Email sender information not found in environment variables'
       );
       return;
     }
 
+    const configuredName = process.env.EMAIL_FROM_NAME;
+    const senderName = !configuredName || /^(postiz|gitroom)$/i.test(configuredName)
+      ? postvoice.name
+      : configuredName;
+
     const modifiedHtml = `
     <div style="
-        background: linear-gradient(to bottom right, #e6f2ff, #f0e6ff);
+        background: #F3F5F1;
+        font-family: 'Plus Jakarta Sans', Arial, sans-serif;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -94,12 +101,12 @@ export class EmailService {
                 font-weight: bold;
                 margin-bottom: 1.5rem;
                 text-align: left;
-                color: #1f2937;
+                color: #16352E;
             ">${subject}</h1>
             
             <div style="
                 margin-bottom: 2rem;
-                color: #374151;
+                color: #3A4540;
             ">
                 ${html}
             </div>
@@ -107,16 +114,16 @@ export class EmailService {
             <div style="
                 display: flex;
                 align-items: center;
-                border-top: 1px solid #e5e7eb;
+                border-top: 1px solid #DFE4DC;
                 padding-top: 1.5rem;
             ">
                 <div>
                     <h2 style="
                         font-size: 1.25rem;
                         font-weight: 600;
-                        color: #1f2937;
+                        color: #16352E;
                         margin: 0;
-                    ">${process.env.EMAIL_FROM_NAME}</h2>
+                    ">${senderName}</h2>
                     <div style="font-size: 12px">
                       You can change your notification preferences in your <a href="${process.env.FRONTEND_URL}/settings">account settings.</a>
                      </div>
@@ -133,7 +140,7 @@ export class EmailService {
           to,
           subject,
           modifiedHtml,
-          process.env.EMAIL_FROM_NAME,
+          senderName,
           process.env.EMAIL_FROM_ADDRESS,
           replyTo
         );

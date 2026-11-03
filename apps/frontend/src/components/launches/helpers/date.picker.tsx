@@ -158,7 +158,7 @@ export const DatePickerPanel: FC<{
                   : modifiers.outside
                   ? '!text-newTextColor/20 !font-[400]'
                   : dayjs(day).isSame(toPickerDate(newDayjs()), 'day')
-                  ? '!text-[#FC69FF] !font-[600]'
+                  ? '!text-[var(--pv-coral)] !font-[600]'
                   : '!text-textItemBlur !font-[400]'
               )
             }
@@ -240,7 +240,7 @@ export const DatePickerPanel: FC<{
         value={toPickerDate(date)}
         dayClassName={(date, modifiers) => {
           if (modifiers.weekend) {
-            return '!text-customColor28';
+            return '!text-brand-coral';
           }
           if (modifiers.outside) {
             return '!text-gray';

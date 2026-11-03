@@ -4,7 +4,10 @@ module.exports = {
   content: ['./src/**/*.{ts,tsx,html}', '../../libraries/**/*.{ts,tsx,html}'],
   theme: {
     extend: {
+      borderRadius: { DEFAULT: '8px' },
+      fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
       colors: {
+        brand: { green: '#16352E', charcoal: '#121A17', coral: '#F07A5A', cloud: '#F3F5F1', mist: '#E8ECE6', line: '#DFE4DC' },
         primary: 'var(--color-primary)',
         secondary: 'var(--color-secondary)',
         textColor: 'var(--new-btn-text)',
@@ -87,7 +90,7 @@ module.exports = {
         blockSeparator: 'var(--new-blockSeparator)',
         btnSimple: 'var(--new-btn-simple)',
         btnText: 'var(--new-btn-text)',
-        btnPrimary: 'var(--new-btn-primary)',
+        btnPrimary: 'rgb(var(--pv-primary-rgb) / <alpha-value>)',
         ai: 'var(--new-ai-btn)',
         boxHover: 'var(--new-box-hover)',
         newTableBorder: 'var(--new-table-border)',

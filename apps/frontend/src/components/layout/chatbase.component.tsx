@@ -75,7 +75,7 @@ const ChatBaseCode: FC<{ token: string }> = ({ token }) => {
     const onLoad = function () {
       const script = document.createElement('script');
       script.src = 'https://www.chatbase.co/embed.min.js';
-      script.id = '1zVZuOz0vgFE_NLumfPPj';
+      script.id = process.env.NEXT_PUBLIC_CHATBASE_BOT_ID!;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       script.domain = 'www.chatbase.co';

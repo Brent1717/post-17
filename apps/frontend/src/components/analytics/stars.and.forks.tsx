@@ -143,7 +143,7 @@ export const StarsAndForks: FC<StarsAndForksInterface> = (props) => {
               </div>
             </div>
             <div className="flex items-center">
-              <div className="w-[2px] h-[30px] bg-customColor11 me-[16px]"></div>
+              <div className="w-[2px] h-[30px] bg-brand-coral me-[16px]"></div>
               <div className="text-[24px] flex-1">
                 <UtcToLocalDateRender
                   date={
@@ -155,7 +155,7 @@ export const StarsAndForks: FC<StarsAndForksInterface> = (props) => {
               <div
                 className={clsx(
                   'text-[24px]',
-                  p === 0 ? 'text-customColor12' : 'text-customColor13'
+                  p === 0 ? 'text-brand-coral' : 'text-customColor13'
                 )}
               >
                 <UtcToLocalDateRender
@@ -171,7 +171,7 @@ export const StarsAndForks: FC<StarsAndForksInterface> = (props) => {
               <div
                 className={clsx(
                   'text-[24px]',
-                  p === 0 ? 'text-customColor12' : 'text-customColor13'
+                  p === 0 ? 'text-brand-coral' : 'text-customColor13'
                 )}
               >
                 <UtcToLocalDateRender

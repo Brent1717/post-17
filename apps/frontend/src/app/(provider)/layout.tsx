@@ -30,7 +30,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           stripeClient=""
           environment={process.env.NODE_ENV!}
           backendUrl={process.env.NEXT_PUBLIC_BACKEND_URL!}
-          plontoKey={process.env.NEXT_PUBLIC_POLOTNO!}
+          plontoKey={process.env.POLOTNO_COMMERCIAL_LICENSE === 'true' ? process.env.NEXT_PUBLIC_POLOTNO || '' : ''}
           billingEnabled={isBillingEnabled()}
           paymentProvider={process.env.PAYMENT_PROVIDER || STRIPE_PROVIDER}
           discordUrl={process.env.NEXT_PUBLIC_DISCORD_SUPPORT!}

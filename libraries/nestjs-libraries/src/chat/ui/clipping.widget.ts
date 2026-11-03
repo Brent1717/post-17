@@ -13,8 +13,8 @@ export const clippingWidgetHtml = (backendUrl: string) => `<!DOCTYPE html>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
-  :root { color-scheme: light dark; --bg: #ffffff; --fg: #0e0e0e; --muted: #6b6b6b; --border: #d9d9d9; --accent: #612bd3; --ok: #1a7f37; --bad: #cf222e; }
-  @media (prefers-color-scheme: dark) { :root { --bg: #1a1919; --fg: #ffffff; --muted: #9c9c9c; --border: #3a3a3a; --ok: #3fb950; --bad: #f85149; } }
+  :root { color-scheme: light dark; --bg: #ffffff; --fg: #0e0e0e; --muted: #6b6b6b; --border: #d9d9d9; --new-btn-primary: #16352E; --accent: var(--new-btn-primary); --ok: #1a7f37; --bad: #cf222e; }
+  @media (prefers-color-scheme: dark) { :root { --new-btn-primary: #F07A5A; --bg: #121A17; --fg: #ffffff; --muted: #9c9c9c; --border: #3a3a3a; --ok: #3fb950; --bad: #f85149; } }
   * { box-sizing: border-box; }
   body { margin: 0; padding: 16px; background: var(--bg); color: var(--fg); font: 14px/1.4 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
   #title { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
